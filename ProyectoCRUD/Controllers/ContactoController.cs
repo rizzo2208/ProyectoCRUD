@@ -48,5 +48,33 @@ namespace ProyectoCRUD.Controllers
             }
                 return View(olista);//manda a la lista al view
         }
+
+
+        public ActionResult Registrar()
+        {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Registrar(Contacto ocontacto)
+        {
+            using (SqlConnection oconection = new SqlConnection(conexion))
+            {
+                SqlCommand cmd = new SqlCommand("sp_Registrar", oconection);//establese la forma de lectua ala BD
+                cmd.Parameters.AddWithValue("Nombre", ocontacto.Nombre);
+                cmd.Parameters.AddWithValue("Apellido", ocontacto.Apellido);
+                cmd.Parameters.AddWithValue("correo", ocontacto.Correo);
+                cmd.Parameters.AddWithValue("Telefono", ocontacto.Telefono);
+                
+                cmd.CommandType = CommandType.StoredProcedure;//interpretacion de la informacion
+                oconection.Open();//apertura de conexion
+                cmd.ExecuteNonQuery();
+                
+            }
+            return RedirectToAction("Inicio","Contacto");
+        }
+
     }
 }
